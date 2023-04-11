@@ -1,0 +1,17 @@
+
+//Expresion tipo Json para identificar tipos de extensiones en los documentos.
+
+
+substring(triggerOutputs()?['body/{FilenameWithExtension}'],add(1, lastIndexOf(triggerOutputs()?['body/{FilenameWithExtension}'],'.')))
+
+
+//Json para Convertir las rutas a html 
+
+
+encodeUriComponent(triggerOutputs()?['body/{FullPath}'])
+
+
+
+//html para que los enlaces sean amigables.
+
+<a href="documento.html">Enlace a un documento</a>
