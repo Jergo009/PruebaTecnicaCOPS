@@ -1,0 +1,82 @@
+PowerApps
+
+//Codigo para crear elemento desde power app
+
+
+triggerBody()['file']['name']
+
+
+//Codigo para funcionalidad del boton
+
+SubirDocumentosPWA.Run({contentBytes:First(ControlSubidaDocs.Attachments).Value;name:First(ControlSubidaDocs.Attachments).Name})
+
+
+
+//Codigo para subir mas de un elemento con el control
+
+ForAll(ControlSubidaDocs.Attachments As Documentos;SubirDocumentosPWA.Run({contentBytes:Documentos.Value;name:Documentos.Name}))
+
+
+
+Propiedades para vista de carpetas
+
+ThisItem.Name  nombre
+
+ThisItem.'Folder path'  carpeta
+
+ThisItem.'Full Path'  directorio completo
+
+ThisItem.'Link to item'  vinculo al elemento
+
+
+
+//Inicilizar un variable cuando se ejecuta la aplicación 
+
+Set(varFolderPathCurrent; "Repositorio Principal/")
+
+
+//Codigo para ordenar los elementos 
+
+Sort(
+    Sort(
+        Filter(
+            'Repositorio Principal';
+            'Link to item' = varFolderPathCurrent
+        );
+        Name;
+        SortOrder.Ascending
+    );
+    IsFolder;
+    SortOrder.Descending
+)
+
+
+//Cambiar iconos según tipo de archivo
+
+If(ThisItem.IsFolder; Icon.Folder; Icon.DocumentWithContent)
+
+//Cambiar colores según tipo de archivo
+
+If(ThisItem.IsFolder; RGBA(227; 184; 11; 1); Color.DarkGray)
+
+
+
+Seleccionar Elemento
+//
+If(
+    //verifica el elemento de la galeria es una carpeta o un archivo
+    ThisItem.IsFolder;
+
+    //Se obtiene la ubicación la carpeta seleccionada.
+    Set(
+        varFolder;
+        ThisItem.'Full Path' & "/"
+    );
+
+    //abrir el archivo en una nueva pestaña del buscador
+    Launch(
+        ThisItem.'Link to item';
+        Blank();
+        LaunchTarget.New
+    )
+)
